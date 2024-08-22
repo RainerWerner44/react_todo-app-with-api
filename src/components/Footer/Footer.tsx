@@ -2,29 +2,28 @@ import { FilterTypes } from '../../types/FilterTypes';
 import { deleteTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../Filter/Filter';
+import { ErrorMessage } from '../../types/ErrorMesage';
 
 type Props = {
-  notCompletedTodos: number;
+  notCompletedTodosCount: number;
   setIsDeletedTodoHasLoader: (state: boolean) => void;
   completedIds: number[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  setIsErrorHidden: (state: boolean) => void;
-  setIsDeletedRequestHasError: (state: boolean) => void;
   isAnyCompletedTodos: boolean;
   selectedTodos: FilterTypes;
   setSelectedTodos: (state: FilterTypes) => void;
+  setErrorMessage: (error: string) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  notCompletedTodos,
+  notCompletedTodosCount,
   setIsDeletedTodoHasLoader,
   completedIds,
   setTodos,
-  setIsErrorHidden,
-  setIsDeletedRequestHasError,
   isAnyCompletedTodos,
   selectedTodos,
   setSelectedTodos,
+  setErrorMessage,
 }) => {
   function handleDeleteCompletedTodos() {
     setIsDeletedTodoHasLoader(true);
@@ -42,12 +41,7 @@ export const Footer: React.FC<Props> = ({
         );
 
         if (results.some(result => result.status === 'rejected')) {
-          setIsErrorHidden(false);
-          setIsDeletedRequestHasError(true);
-          setTimeout(() => {
-            setIsErrorHidden(true);
-            setIsDeletedRequestHasError(false);
-          }, 3000);
+          setErrorMessage(ErrorMessage.DeleteTodoError);
         }
       })
       .finally(() => {
@@ -58,7 +52,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {notCompletedTodos} items left
+        {notCompletedTodosCount} items left
       </span>
 
       <Filter

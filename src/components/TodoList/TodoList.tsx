@@ -8,15 +8,12 @@ type Props = {
   tempTodo: Todo | null;
   handleDeleteTodoClick: (id: number) => void;
   isDeletedTodoHasLoader: boolean;
-  setIsToggledRequestHasError: (state: boolean) => void;
-  setIsErrorHidden: (state: boolean) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setRenameTodoTitle: (title: string) => void;
   isTodoRenaming: boolean;
   setIsTodoRenaming: (state: boolean) => void;
   renameTodoTitle: string;
-  setIsRenameRequestHasError: (state: boolean) => void;
-  setIsDeletedRequestHasError: (state: boolean) => void;
+  handleError: (error: string) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -24,15 +21,12 @@ export const TodoList: React.FC<Props> = ({
   tempTodo,
   handleDeleteTodoClick,
   isDeletedTodoHasLoader,
-  setIsToggledRequestHasError,
-  setIsErrorHidden,
   setTodos,
   setRenameTodoTitle,
   isTodoRenaming,
   setIsTodoRenaming,
   renameTodoTitle,
-  setIsRenameRequestHasError,
-  setIsDeletedRequestHasError,
+  handleError,
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -42,15 +36,12 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
           handleDeleteTodoClick={handleDeleteTodoClick}
           isDeletedTodoHasLoader={isDeletedTodoHasLoader}
-          setIsToggledRequestHasError={setIsToggledRequestHasError}
-          setIsErrorHidden={setIsErrorHidden}
           setTodos={setTodos}
           setRenameTodoTitle={setRenameTodoTitle}
           isTodoRenaming={isTodoRenaming}
           setIsTodoRenaming={setIsTodoRenaming}
           renameTodoTitle={renameTodoTitle}
-          setIsRenameRequestHasError={setIsRenameRequestHasError}
-          setIsDeletedRequestHasError={setIsDeletedRequestHasError}
+          handleError={handleError}
         />
       ))}
       {tempTodo && <TempTodo tempTodo={tempTodo} />}

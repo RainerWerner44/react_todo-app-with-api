@@ -1,31 +1,13 @@
 import classNames from 'classnames';
 
 type Props = {
-  isErrorHidden: boolean;
-  setIsErrorHidden: (state: boolean) => void;
-  setIsTitleError: (state: boolean) => void;
-  setIsRequestHasError: (state: boolean) => void;
-  setIsTodosLoadedError: (state: boolean) => void;
-  isTodosLoadedError: boolean;
-  isTitleError: boolean;
-  isRequestHasError: boolean;
-  isDeletedRequestHasError: boolean;
-  isToggledRequestHasError: boolean;
-  isRenameRequestHasError: boolean;
+  errorMessage: string;
+  setErrorMessage: (error: string) => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
-  isErrorHidden,
-  setIsErrorHidden,
-  setIsTitleError,
-  setIsRequestHasError,
-  setIsTodosLoadedError,
-  isTodosLoadedError,
-  isTitleError,
-  isRequestHasError,
-  isDeletedRequestHasError,
-  isToggledRequestHasError,
-  isRenameRequestHasError,
+  errorMessage,
+  setErrorMessage,
 }) => {
   return (
     <div
@@ -35,26 +17,16 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: isErrorHidden },
+        { hidden: !errorMessage },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => {
-          setIsErrorHidden(true);
-          setIsTitleError(false);
-          setIsRequestHasError(false);
-          setIsTodosLoadedError(false);
-        }}
+        onClick={() => setErrorMessage('')}
       />
-      {isTodosLoadedError && <p>Unable to load todos</p>}
-      {isTitleError && 'Title should not be empty'}
-      {isRequestHasError && <p>Unable to add a todo</p>}
-      {isDeletedRequestHasError && 'Unable to delete a todo'}
-      {(isToggledRequestHasError || isRenameRequestHasError) &&
-        'Unable to update a todo'}
+      {errorMessage.length > 0 && errorMessage}
     </div>
   );
 };

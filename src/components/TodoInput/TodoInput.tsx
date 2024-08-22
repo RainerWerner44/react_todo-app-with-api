@@ -2,35 +2,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 import { deleteTodo, renameTodo, toggleTodo } from '../../api/todos';
+import { ErrorMessage } from '../../types/ErrorMesage';
 
 type Props = {
   todo: Todo;
   handleDeleteTodoClick: (id: number) => void;
   isDeletedTodoHasLoader: boolean;
-  setIsToggledRequestHasError: (state: boolean) => void;
-  setIsErrorHidden: (state: boolean) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setRenameTodoTitle: (title: string) => void;
   isTodoRenaming: boolean;
   setIsTodoRenaming: (state: boolean) => void;
   renameTodoTitle: string;
-  setIsRenameRequestHasError: (state: boolean) => void;
-  setIsDeletedRequestHasError: (state: boolean) => void;
+  handleError: (error: string) => void;
 };
 
 export const TodoInput: React.FC<Props> = ({
   todo,
   handleDeleteTodoClick,
   isDeletedTodoHasLoader,
-  setIsToggledRequestHasError,
-  setIsErrorHidden,
   setTodos,
   setRenameTodoTitle,
   isTodoRenaming,
   setIsTodoRenaming,
   renameTodoTitle,
-  setIsRenameRequestHasError,
-  setIsDeletedRequestHasError,
+  handleError,
 }) => {
   const [deletedTodoId, setDeletedTodoId] = useState(0);
   const [isCompleted, setIsCompleted] = useState(todo.completed);
@@ -61,12 +56,7 @@ export const TodoInput: React.FC<Props> = ({
         );
       })
       .catch(() => {
-        setIsErrorHidden(false);
-        setIsToggledRequestHasError(true);
-        setTimeout(() => {
-          setIsErrorHidden(true);
-          setIsToggledRequestHasError(false);
-        }, 3000);
+        handleError(ErrorMessage.UpdateTodoError);
       })
       .finally(() => {
         setIsToggledTodoHasLoader(false);
@@ -101,12 +91,7 @@ export const TodoInput: React.FC<Props> = ({
           setIsTodoRenaming(false);
           setSelectedTodoForRenamingId(0);
         } catch {
-          setIsErrorHidden(false);
-          setIsDeletedRequestHasError(true);
-          setTimeout(() => {
-            setIsErrorHidden(true);
-            setIsDeletedRequestHasError(false);
-          }, 3000);
+          handleError(ErrorMessage.DeleteTodoError);
         } finally {
           setIsRenamedTodoHasLoader(false);
         }
@@ -134,12 +119,7 @@ export const TodoInput: React.FC<Props> = ({
       setIsTodoRenaming(false);
       setSelectedTodoForRenamingId(0);
     } catch {
-      setIsRenameRequestHasError(true);
-      setIsErrorHidden(false);
-      setTimeout(() => {
-        setIsErrorHidden(true);
-        setIsRenameRequestHasError(false);
-      }, 3000);
+      handleError(ErrorMessage.UpdateTodoError);
     } finally {
       setIsRenamedTodoHasLoader(false);
     }
@@ -161,7 +141,6 @@ export const TodoInput: React.FC<Props> = ({
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control*/}
       <label className="todo__status-label" htmlFor={`input-${todo.id}`}>
         <input
           id={`input-${todo.id}`}
@@ -170,6 +149,7 @@ export const TodoInput: React.FC<Props> = ({
           className="todo__status"
           checked={todo.completed}
           onChange={handleToggleChange}
+          aria-label="Toggle todo status"
         />
       </label>
       {!selectedTodoForRenaming && (
