@@ -9,8 +9,7 @@ import { FilterTypes } from './types/FilterTypes';
 import classNames from 'classnames';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
-/* eslint-disable-next-line max-len */
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { ErrorNotification } from './components/ErrorNotification';
 import { filterTodos } from './helper/utilsFunctions';
 import { ErrorMessage } from './types/ErrorMesage';
 
@@ -74,7 +73,7 @@ export const App: React.FC = () => {
   return (
     <div
       className={classNames('todoapp', {
-        'has-error': errorMessage.length > 0,
+        'has-error': Boolean(errorMessage.length),
       })}
     >
       <h1 className="todoapp__title">todos</h1>
@@ -91,30 +90,31 @@ export const App: React.FC = () => {
           handleError={handleError}
         />
         {areTodosExist && (
-          <TodoList
-            filteredTodos={filteredTodos}
-            tempTodo={tempTodo}
-            handleDeleteTodoClick={handleDeleteTodoCLick}
-            isDeletedTodoHasLoader={isDeletedTodoHasLoader}
-            setTodos={setTodos}
-            isTodoRenaming={isTodoRenaming}
-            setIsTodoRenaming={setIsTodoRenaming}
-            setRenameTodoTitle={setRenameTodoTitle}
-            renameTodoTitle={renameTodoTitle}
-            handleError={handleError}
-          />
-        )}
-        {areTodosExist && (
-          <Footer
-            notCompletedTodosCount={notCompletedTodosCount}
-            setIsDeletedTodoHasLoader={setIsDeletedTodoHasLoader}
-            completedIds={completedIds}
-            setTodos={setTodos}
-            isAnyCompletedTodos={isAnyCompletedTodos}
-            selectedTodos={selectedTodos}
-            setSelectedTodos={setSelectedTodos}
-            setErrorMessage={setErrorMessage}
-          />
+          <>
+            <TodoList
+              filteredTodos={filteredTodos}
+              tempTodo={tempTodo}
+              handleDeleteTodoClick={handleDeleteTodoCLick}
+              isDeletedTodoHasLoader={isDeletedTodoHasLoader}
+              setTodos={setTodos}
+              isTodoRenaming={isTodoRenaming}
+              setIsTodoRenaming={setIsTodoRenaming}
+              setRenameTodoTitle={setRenameTodoTitle}
+              renameTodoTitle={renameTodoTitle}
+              handleError={handleError}
+            />
+
+            <Footer
+              notCompletedTodosCount={notCompletedTodosCount}
+              setIsDeletedTodoHasLoader={setIsDeletedTodoHasLoader}
+              completedIds={completedIds}
+              setTodos={setTodos}
+              isAnyCompletedTodos={isAnyCompletedTodos}
+              selectedTodos={selectedTodos}
+              setSelectedTodos={setSelectedTodos}
+              setErrorMessage={setErrorMessage}
+            />
+          </>
         )}
       </div>
 
