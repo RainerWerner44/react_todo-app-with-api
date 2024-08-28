@@ -12,21 +12,21 @@ export const Filter: React.FC<Props> = ({
 }) => {
   return (
     <nav className="filter" data-cy="Filter">
-      {Object.entries(FilterTypes).map(filterType => (
+      {Object.entries(FilterTypes).map(([filterKey, filterValue]) => (
         <a
-          href={filterType[0] === 'All' ? `#/` : `#/${filterType[0]}`}
+          href={filterKey === 'All' ? `#/` : `#/${filterKey}`}
           className={classNames('filter__link', {
-            selected: selectedTodos === filterType[1],
+            selected: selectedTodos === filterValue,
           })}
-          data-cy={`FilterLink${filterType[0]}`}
+          data-cy={`FilterLink${filterKey}`}
           onClick={() => {
-            if (selectedTodos !== filterType[0]) {
-              setSelectedTodos(filterType[1]);
+            if (selectedTodos !== filterKey) {
+              setSelectedTodos(filterValue);
             }
           }}
-          key={filterType[0]}
+          key={filterKey}
         >
-          {filterType[0]}
+          {filterValue}
         </a>
       ))}
     </nav>
